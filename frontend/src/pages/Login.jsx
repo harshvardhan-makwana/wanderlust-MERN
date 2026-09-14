@@ -2,10 +2,14 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import api from "../axios/api";
+import { useDispatch } from 'react-redux'
+import { setToken } from "../redux/authSlice";
 
 export default function Login() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,12 +23,14 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:3000/users/login",
+      const res = await api.post(
+        "/users/login",
         formData,
       );
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      //old flow
+      //localStorage.setItem("token", res.data.token);
+      //localStorage.setItem("user", JSON.stringify(res.data));
+      dispatch(setToken(res.data))
       navigate('/')
       toast.success("login success");
       setFormData({

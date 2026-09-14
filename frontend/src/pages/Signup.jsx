@@ -2,13 +2,19 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import api from "../axios/api";
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setToken } from "../redux/authSlice";
 
 export default function Signup() {
+  const navigate = useNavigate();
+   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    role:""
+    role: ""
   });
 
   const handleInputChange = (e) => {
@@ -18,15 +24,19 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:3000/users/register",
-        formData,
+      const res = await api.post(
+        "/users/register",
+        formData
       );
-      toast.success("user register");
-      localStorage.setItem("token", res.data.token);
+      //old flow
+      //localStorage.setItem("token", res.data.token);
+      //localStorage.setItem("user", JSON.stringify(res.data));
+      dispatch(setToken(res.data))
+      
+      navigate('/')
+      toast.success("signup success");
       setFormData({
         username: "",
         email: "",
@@ -82,7 +92,7 @@ export default function Signup() {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 mt-4">
             <label
               htmlFor="password"
               className="label"
@@ -100,9 +110,10 @@ export default function Signup() {
               required
             />
           </div>
-          <div>
-            <select name="role" id="role" value={formData.role} onChange={handleInputChange} required>
-             <option value="">Select your role</option>
+          <div className="mb-4 mt-4">
+            <label >Select your role</label>
+            <select name="role" className="input-field" id="role" value={formData.role} onChange={handleInputChange} required>
+              <option value="">Select your role</option>
               <option value="user">user </option>
               <option value="owner">owner</option>
             </select>

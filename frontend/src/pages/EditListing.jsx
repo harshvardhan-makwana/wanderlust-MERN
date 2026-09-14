@@ -3,9 +3,11 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import api from "../axios/api";
 
 export default function EditListing() {
-  const token = localStorage.getItem("token")
+  const storedUser=JSON.parse(localStorage.getItem('user') || null);
+  const token=storedUser?.token;
   const [file, setFile] = useState(null)
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export default function EditListing() {
     }
     const getListings = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/listings/${id}`)
+        const res = await api.get(`/listings/${id}`)
         setFormData(res.data)
       } catch (error) {
         console.log(error)
@@ -50,8 +52,8 @@ export default function EditListing() {
       data.append("price", formData.price)
       data.append("country", formData.country)
       data.append("location", formData.location)
-      const res = await axios.put(
-        `http://localhost:3000/listings/${id}`, data,
+      const res = await api.put(
+        `/listings/${id}`, data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success(res.data.message);

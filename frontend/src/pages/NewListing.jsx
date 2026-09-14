@@ -3,9 +3,12 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import api from "../axios/api";
+import { useSelector } from "react-redux";
 
 export default function NewListing() {
-  const token = localStorage.getItem("token")
+  const {user}=useSelector((state)=>state.auth);
+  const token=user?.token;
   const [file, setFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -34,7 +37,7 @@ export default function NewListing() {
       data.append("price", formData.price)
       data.append("country", formData.country)
       data.append("location", formData.location)
-      const res = await axios.post('http://localhost:3000/listings', data, { headers: { Authorization: `Bearer ${token}` } })
+      const res = await api.post('/listings', data)
       toast.success("new listings add")
       navigate('/')
     } catch (error) {

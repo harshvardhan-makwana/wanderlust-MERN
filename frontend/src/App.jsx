@@ -19,7 +19,7 @@ function App() {
   return (
 
     <BrowserRouter>
-    <div className='flex flex-col min-h-screen'>
+    <div className='flex flex-col min-h-screen max-w-[100vw] overflow-x-hidden'>
       <Navbar />
       <main className='flex-grow'>
       <Routes>
@@ -32,7 +32,7 @@ function App() {
       </Routes>
       </main>
       <Footer/>
-       <ToastContainer />
+       <ToastContainer position='top-center'/>
       </div>
     </BrowserRouter>
   )

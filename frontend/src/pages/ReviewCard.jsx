@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { toast } from 'react-toastify'
+import api from '../axios/api'    
 
 export default function ReviewCard({ review, listingId, onUpdate }) {
   const token = localStorage.getItem('token')
@@ -10,7 +11,7 @@ export default function ReviewCard({ review, listingId, onUpdate }) {
   const handleDeleteReview = async (reviewId, listingId) => {
     try {
       console.log(reviewId);
-      await axios.delete(`http://localhost:3000/listings/${listingId}/reviews/${reviewId}`, { headers: { Authorization: `Bearer ${token}` } })
+      await api.delete(`/listings/${listingId}/reviews/${reviewId}`)
       toast.success("Review Delete")
       window.location.reload();
     } catch (error) {

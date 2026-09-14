@@ -9,16 +9,15 @@ import ReviewCard from "./ReviewCard";
 
 export default function ShowListing() {
   const [listing, setListing] = useState({});
-  const currentUser = JSON.parse(localStorage.getItem("user"));
+  const currentUser = JSON.parse(localStorage.getItem("user") || 'null');
+  const token=currentUser?.token;
   const isOwner = currentUser?._id === (listing?.owner?._id || listing?.owner);
   const navigate = useNavigate()
   const { id } = useParams();
-  const token = localStorage.getItem("token")
+  
   const getListing = async () => {
     try {
       const res = await axios.get(`http://localhost:3000/listings/${id}`);
-      console.log(res.data);
-
       setListing(res.data);
     } catch (error) {
       console.log(error);
@@ -42,10 +41,10 @@ export default function ShowListing() {
   };
 
   return (
-    <div className="max-w-3xl bg-white  mx-auto">
+    <div className="max-w-3xl bg-white  mx-auto p-7 md:p-0 mt-0">
       {listing ? (
         <>
-          <h3 className="text-2xl mt-3 mb-3  text-black">{listing.title}</h3>
+          <h3 className="text-2xl mt-3 mb-3  text-black"><b>{listing.title}</b></h3>
           <figure>
             <img
               src={listing.image?.url}
@@ -54,7 +53,7 @@ export default function ShowListing() {
             />
           </figure>
           <div className="p-1">
-            <h2 className="text-2xl">Owned By {listing.owner?.username}</h2>
+            <h2 className="text-2xl"><b>Owned By {listing.owner?.username}</b></h2>
             <p>{listing.description}</p>
             <p>{listing.price}</p>
             <p>{listing.location}</p>

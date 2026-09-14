@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import api from "../axios/api";
 
 export default function ReviewForm({ listingId }) {
   const navigate = useNavigate()
@@ -18,9 +19,9 @@ export default function ReviewForm({ listingId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        `http://localhost:3000/listings/${listingId}/reviews`,
-        formData, { headers: { Authorization: `Bearer ${token}` } }
+      const res = await api.post(
+        `/listings/${listingId}/reviews`,
+        formData
       );
       toast.success("review Add");
       setFormData({ rating: 5, comment: "" })
