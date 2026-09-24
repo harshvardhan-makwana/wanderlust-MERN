@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import ReviewForm from "./ReviewForm";
 import { toast } from "react-toastify";
 import ReviewCard from "./ReviewCard";
+import api from "../axios/api";
 
 export default function ShowListing() {
   const [listing, setListing] = useState({});
@@ -17,7 +18,7 @@ export default function ShowListing() {
   
   const getListing = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/listings/${id}`);
+      const res = await api.get(`/listings/${id}`);
       setListing(res.data);
     } catch (error) {
       console.log(error);
@@ -32,7 +33,7 @@ export default function ShowListing() {
       navigate('/login')
     }
     try {
-      await axios.delete(`http://localhost:3000/listings/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await api.delete(`/listings/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       toast.success("listing delete");
       navigate('/')
     } catch (error) {
