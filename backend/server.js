@@ -13,14 +13,14 @@ require("dotenv").config();
 
 connectDB();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173", "https://wanderlust-mern-gmne.onrender.com"] }));
 
 app.use("/listings", listingRouter);
 app.use("/users", userRouter);
 
-// app.get("/", (req, res) => {
-//   res.send("root is working");
-// });
+app.get("/", (req, res) => {
+  res.send("root is working");
+});
 
 app.use("/listings/:id/reviews", reviewRouter);
 
